@@ -7,6 +7,7 @@ let request = new XMLHttpRequest();
     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         let response = JSON.parse(this.responseText);  
         displayProducts(response)
+        
     }     
    
 };
@@ -22,15 +23,14 @@ const displayProducts = (response) =>{
                             <div class="card-body">
                                 <h5 class="card-title">${product.name}</h5>
                                 <p class="card-price">${cameraPrice}</p>
-                                <a href="#" class="btn btn-primary">Découvrir</a>
+                                <a href="product.html?id=${product._id}" class="btn btn-primary">Découvrir</a>
                             </div>
                         </div>
                      </li>`;
-    document.querySelector("#listCamera").innerHTML += item                                                                
+    document.querySelector("#listCameras").innerHTML += item;                                                                
     }    
 }
-
-
+ 
 /* 
 class Article {
     constructor(jsonArticle){
@@ -59,7 +59,5 @@ fetch("http://localhost:3000/api/cameras")
     }); 
               
             */
-     
-    
-    
-    
+
+
