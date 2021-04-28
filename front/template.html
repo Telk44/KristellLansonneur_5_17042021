@@ -14,75 +14,90 @@
 </head>
 
 
-
-
-
-
-<div class="card mb-3" style="max-width: 540px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-        <img src="..." alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">CAMERA NAME</h5>
-        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum soluta tenetur dolorum eius id debitis dolores vitae eligendi amet neque maxime, veniam et, laboriosam quisquam illo. Similique accusantium corporis natus?.</p>
-
-        <p class="card-text"> Quantité       
-          <select id="qt" name="q">                  
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-          </select>
-        </p>  
-
-        
-       <!--  <p class="card-text">Objectif :  -->
-          <div class="dropdown">
-            <label for="formFile" class="form-label"> Objectif </label> 
-            <button class="btn btn-secondary btn-sm  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-              Choisir
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="#">celui-là</a></li>
-              <li><a class="dropdown-item" href="#">ou ça</a></li>
-              <li><a class="dropdown-item" href="#">plutot ça</a></li>
-            </ul> 
-          </div> 
-               
-            <!-- <select id="lens" name="l">
-                <option value="len">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option> -->
-                
+<div class="row">
+  <div class="col" id = "productDescription">  
+    <div class="card mb-3" style="max-width: 540px;">
+      <div class="row g-0">
+        <div class="col-md-4">
+            <img src="..." alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">CAMERA NAME</h5>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum soluta tenetur dolorum eius id debitis dolores vitae eligendi amet neque maxime, veniam et, laboriosam quisquam illo. Similique accusantium corporis natus?</p>
+            <div class="card-text"> Quantité 
+              <select id="qt" name="q">                  
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+              </select>
+            </div>  
+            <div class="dropdown">
+              <label for="formFile" class="form-label"> Objectif </label> 
+              <button class="btn btn-secondary btn-sm  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Choisir
+              </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <li><a class="dropdown-item">lens1</a></li>
+                      <li><a class="dropdown-item">lens2</a></li>
+                      <li><a class="dropdown-item">lens3/a></li>
+                    </ul> 
+            </div> 
             
-
-        <p class="card-text">Quantité<div class="dropdown"></p> 
-          <button class="btn btn-secondary btn-sm  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            0
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="#">1</a></li>
-            <li><a class="dropdown-item" href="#">2</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul> 
-          
-        <button type="button" class="add-to-cart" data-id="#" data-name="#" data-price="#" data-weight="97" data-url="/#">Ajouter au panier</button>       
+          <!--  <p class="card-text">Quantité<div class="dropdown"></p> 
+              <button class="btn btn-secondary btn-sm  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                0
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">1</a></li>
+                <li><a class="dropdown-item" href="#">2</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>  -->
+              
+        
+            <button type="button" class="add-to-cart" data-id="#" data-name="#" data-price="#" data-weight="97" data-url="/#">Ajouter au panier</button>       
+          </div>
+        </div>
       </div>
-    </div>
+    </div>       
+  </div>
+</div>
+<div class="card col-6 ">
+  <img src="${product.imageUrl}" class="card-img-top" alt="Photo de la caméra" width = "500px" >
+  <div class="card-body">
+      <h5 class="card-title">nom du produit</h5>
+      <p class ="card-description ">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nobis animi consequatur eum fugiat unde nesciunt neque maiores repudiandae veniam placeat asperiores a non provident iusto, hic architecto qui sequi mollitia.</p>
+      <p class="card-price">prix de la camera € </p>
+
+      <a href="#" class="btn btn-primary">Commander</a>
+
+
+      <a href="#" class="btn btn-primary">Commander</a>
   </div>
 </div>
 
 
+<div class ="row mx-autow-50>
+  <div class= "card col m-auto p-5>
+    <img src ="#" class="card-image-top img-fluid" alt="photo de findcamera.name"/>
+  </div>
+  <div class= "card-body text-left px-0 d-flex flex-column justify-content-between">
+    <h3 class="card-title ">Camera Name</h3>
+    <p class = "card-description text-justify">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit enim beatae fugiat, adipisci esse assumenda ex omnis, commodi ea dolore architecto numquam blanditiis optio tenetur excepturi provident error. Ex, numquam!</p>
+  </div>
 
- 
 
+
+
+
+
+</div>
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
