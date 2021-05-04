@@ -1,5 +1,5 @@
 //Liens avec l'API
-const get = ()=>{
+const get = (url)=>{
   return new Promise((resolve,reject)=>{
     let request = new XMLHttpRequest();
     request.onreadystatechange = function() {
@@ -11,7 +11,7 @@ const get = ()=>{
            reject("erreur du serveur");
        }
    };
-   request.open("GET", "http://localhost:3000/api/camera");
+   request.open("GET", url);
    request.send(); 
    
   })  
@@ -20,10 +20,9 @@ const get = ()=>{
 const displayProducts = async () =>{
     let response = null;
     try {
-        response = await get();
+        response = await get("http://localhost:3000/api/cameras");
     } catch (error) {
-        console.log('erreur');
-        
+        console.log('erreur');        
     }
        for(let product of response){
         let cameraPrice = new Intl.NumberFormat('fr-FE', { style: 'currency', currency: 'EUR',  minimumFractionDigits: 2 }).format(product.price/100);
@@ -37,13 +36,13 @@ const displayProducts = async () =>{
                             </div>
                         </div>
                      </li>`;
-    document.querySelector("#listCameras").innerHTML += item;                                                                
+        document.querySelector("#listCameras").innerHTML += item;                                                                
     }    
 }
 displayProducts();
  
-/* 
-class Article {
+
+/* class Article {
     constructor(jsonArticle){
         jsonArticle && Object.assign (this, jsonArticle)
         
@@ -55,20 +54,21 @@ fetch("http://localhost:3000/api/cameras")
     .then(jsonListArticle => { 
         for(let jsonArticle of jsonListArticle){
             let article = new Article (jsonArticle);
-            document.querySelector("#listCamera").innerHTML += `<li class = "list-inline-item mb-4">   
-                                                                    <div class="card" style="width: 18rem;">
-                                                                        <img src="${article.imageUrl}" class="card-img-top" alt="..." width = "286px" height="190px">
-                                                                        <div class="card-body">
-                                                                            <h5 class="card-title">${article.name}</h5>
-                                                                            <p class="card-price">${article.price/100} €</p>
-                                                                            <a href="#" class="btn btn-primary">Découvrir</a>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>`;
+            let item = `<li class = "list-inline-item mb-4">   
+            <div class="card" style="width: 18rem;">
+                <img src="${article.imageUrl}" class="card-img-top" alt="..." width = "286px" height="190px">
+                <div class="card-body">
+                    <h5 class="card-title">${article.name}</h5>
+                    <p class="card-price">${article.price/100} €</p>
+                    <a href="#" class="btn btn-primary">Découvrir</a>
+                </div>
+            </div>
+        </li>`;
+            document.querySelector("#listCameras").innerHTML += item;
                                                                 
         }        
     }); 
-              
-            */
+               */
+            
 
 

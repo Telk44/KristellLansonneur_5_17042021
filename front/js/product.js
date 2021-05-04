@@ -1,4 +1,4 @@
-// Fonction récupération de l'ID de la camera dans l'URL
+//----------------------------------Fonction récupération de l'ID de la camera dans l'URL----------------------------------
 
 function getId() {
     // Récupération de la chaîne de requête dans l'URL 
@@ -8,7 +8,7 @@ function getId() {
     return productId;     
 }
   
- //Fonction récupération de la caméra correspondant à l'Id
+//----------------------------------Fonction récupération de la caméra correspondant à l'Id----------------------------------
 
  function getAssociatedCamera(cameras,idCamera) {
     
@@ -19,7 +19,7 @@ function getId() {
 
 
 
-//Création de la structure html de la caméra choisie
+//----------------------------------Création de la structure html de la caméra choisie----------------------------------
 
 function cardCamera(findCamera){
 
@@ -58,22 +58,29 @@ function cardCamera(findCamera){
 
     chooseLense(divCardBody, findCamera);
 
+    //Appel fonction choix de la quantité
+
+    selectQuantity(divCardBody,findCamera);
+ 
     // Création du prix  
 
-    let priceCamera = document.createElement("p");
-    let convertPrice = new Intl.NumberFormat('fr-FE', { style: 'currency', currency: 'EUR',  minimumFractionDigits: 2 }).format(findCamera.price/100);
-    divCardBody.appendChild(priceCamera);
-    priceCamera.classList.add("fw-bold", "align-self-center", "mb-5");
-    priceCamera.textContent = convertPrice;
+    let textPriceCamera = document.createElement("p");
+    divCardBody.appendChild(textPriceCamera);
+    textPriceCamera.classList.add("text-left", "fw-bold","my-3");    
+    textPriceCamera.id = "textPriceCamera";
+    calculatedPrice(findCamera);
 
+    let linkProduct = document.createElement("a");
+    textPriceCamera.appendChild(linkProduct);
     // Création du bouton 
     let buttonBuy = document.createElement("button");
     divCardBody.appendChild(buttonBuy);
     buttonBuy.classList.add("btn", "btn-primary", "align-self-center");
-    buttonBuy.textContent = "Ajouter au panier";       
+    buttonBuy.textContent = "Ajouter au panier"; 
+    addCamera(buttonBuy);      
                                                                                                                                                                                                                                                         
 } 
-    //Ajout du choix des objectifs 
+  //----------------------------------Fonction choix des objectifs ----------------------------------
 
 function chooseLense(divCardBody, findCamera) {
 
@@ -98,12 +105,74 @@ function chooseLense(divCardBody, findCamera) {
          optionLens.textContent = findCamera.lenses[i];
     }
 }
-    // Requête API
+
+  //----------------------------------Fonction ajout choix de la quantité----------------------------------
+
+function selectQuantity(divCardBody,findCamera) {
+    
+    let textChooseQuantity = document.createElement("p");
+    divCardBody.appendChild(textChooseQuantity );
+    textChooseQuantity.classList.add("text-left", "fw-bold","my-3");
+    textChooseQuantity.textContent = "Indiquez la quantité souhaitée : ";
+
+    let chooseQuantity = document.createElement("select");
+    divCardBody.appendChild(chooseQuantity);
+    chooseQuantity.classList.add("col-md-2","align-self-center", "mb-5", "number");
+    chooseQuantity.id="selectQty";
+
+    let quantity = 11;
+    for (let i = 0; i < quantity; i++) {
+         let optionQuantity = document.createElement("option");
+         chooseQuantity.appendChild(optionQuantity);
+         optionQuantity.textContent = i;
+         optionQuantity.id='qty';
+    }
+
+}    
+
+//----------------------------------Calcul du prix total de la commande selon quantité choisie----------------------------------
+
+function calculatedPrice(findCamera){
+     
+    let selectQty = document.getElementById('selectQty'); 
+    let textPriceCamera = document.getElementById('textPriceCamera');
+    selectQty.addEventListener('change',function(){  
+    let playerQty = selectQty.value;  
+    let totalPrice = playerQty*findCamera.price/100;    
+    textPriceCamera.textContent = "Prix Total : " + totalPrice +" €";     
+})
+}
+
+//----------------------------------Ajout des articles dans le panier----------------------------------
+
+//Création d'un tableau d'objets 
+class MyProduct {
+    constructor(idCamera, selectedLense, playerQty) {
+        this.idCamera = idCamera;
+        this.selectedLense = selectedLense;
+        this.playerQty = playerQty;
+    }
+}
+function addCamera(buttonBuy, idCamera) {
+    buttonBuy.addEventListener('click', function () {
+        let basketContent = JSON.parse(localStorage.getItem("basketContent"));
+        let selectedLense = document.getElementById('list').value;
+        let selectQty = document.getElementById('selectQty'); 
+        let playerQty = selectQty.value;
+          console.log(playerQty);
+        if (basketContent === null) {
+            basketContent = [];
+        }
+        let product = new MyProduct(idCamera, selectedLense, playerQty);
+        basketContent.push(product);
+        localStorage.setItem("basketContent", JSON.stringify(basketContent));
+        console.log(localStorage);
+    })
+}
+//----------------------------------Requête API----------------------------------
 
 const getCameraByID = async function(){  
     try{
-        // Récuperation des données de l'API
-
         let response =await fetch ("http://localhost:3000/api/cameras")
         if (response.ok) {
             let cameras = await response.json()
@@ -124,6 +193,8 @@ const getCameraByID = async function(){
         console.log(e)
     }
 }
-   // Appel de la requête
+//----------------------------------Appel de la requête----------------------------------
 
     getCameraByID();
+
+
