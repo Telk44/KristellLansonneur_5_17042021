@@ -93,16 +93,13 @@ function chooseLense(divCardBody, findCamera) {
     divCardBody.appendChild(choiceLens);
     choiceLens.classList.add("col-md-4","align-self-center", "mb-5");
     choiceLens.id = "list";
-
-    let linkLens = document.createElement("option");
-    choiceLens.appendChild(linkLens);
-    linkLens.textContent = "---"
     
     let numberLenses = findCamera.lenses;
     for (let i = 0; i < numberLenses.length; i++) {
          let optionLens = document.createElement("option");
          choiceLens.appendChild(optionLens);
          optionLens.textContent = findCamera.lenses[i];
+         /* optionLens.id = "optionLens"; */
     }
 }
 
@@ -157,13 +154,14 @@ function addCamera(buttonBuy, idCamera) {
     buttonBuy.addEventListener('click', function () {
         let basketContent = JSON.parse(localStorage.getItem("basketContent"));
         let selectedLense = document.getElementById('list').value;
-        let selectQty = document.getElementById('selectQty'); 
-        let playerQty = selectQty.value;
-          console.log(playerQty);
+        let selectQty = document.getElementById('selectQty').value; 
+        let idCamera = getId();
+        /* let playerQty = selectQty.value; */
+          console.log(selectQty);
         if (basketContent === null) {
             basketContent = [];
         }
-        let product = new MyProduct(idCamera, selectedLense, playerQty);
+        let product = new MyProduct(idCamera, selectedLense, selectQty);
         basketContent.push(product);
         localStorage.setItem("basketContent", JSON.stringify(basketContent));
         console.log(localStorage);
