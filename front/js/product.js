@@ -151,8 +151,6 @@ class MyProduct {
     }
 }
 
-
-
 function addCamera(buttonBuy) {
     buttonBuy.addEventListener('click', function () {
         // Récupération du storage
@@ -160,8 +158,7 @@ function addCamera(buttonBuy) {
         // Récupération du type et qtté de camera  à ajouter
         let selectedLense = document.getElementById('list').value;
         let selectQty = document.getElementById('selectQty').value; 
-        let idCamera = getId();
-       
+        let idCamera = getId(); 
 
         
           //console.log(selectQty);
@@ -189,9 +186,9 @@ function addCamera(buttonBuy) {
                     let parseSelectQty = parseInt(selectQty);
                     qtyInt += parseSelectQty;
                     basketContent[i].playerQty = qtyInt;
-                    console.log("nouvelle-quantité",qtyInt) ;         
+                    console.log("nouvelle-quantité",qtyInt) ;    
        
-                     localStorage.setItem("basketContent ", JSON.stringify(basketContent));  
+                    localStorage.setItem("basketContent ", JSON.stringify(basketContent));  
                     console.log("contenu localeStorage",basketContent);                 
                  }
                  else if (basketContent[i].idCamera == idCamera && basketContent[i].selectedLense != selectedLense){
@@ -203,18 +200,11 @@ function addCamera(buttonBuy) {
                  }            
          }
          
-        }
-                        
+        }                       
         
-    })
-   
+    })  
     
 }
-
-
- 
-
-
 
 //----------------------------------Requête API----------------------------------
 
