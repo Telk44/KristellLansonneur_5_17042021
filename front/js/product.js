@@ -150,23 +150,72 @@ class MyProduct {
         this.playerQty = playerQty;
     }
 }
-function addCamera(buttonBuy, idCamera) {
+
+
+
+function addCamera(buttonBuy) {
     buttonBuy.addEventListener('click', function () {
+        // Récupération du storage
         let basketContent = JSON.parse(localStorage.getItem("basketContent"));
+        // Récupération du type et qtté de camera  à ajouter
         let selectedLense = document.getElementById('list').value;
         let selectQty = document.getElementById('selectQty').value; 
         let idCamera = getId();
-        /* let playerQty = selectQty.value; */
-          console.log(selectQty);
-        if (basketContent === null) {
+       
+
+        
+          //console.log(selectQty);
+        if (basketContent == null) {
+            console.log("null")
+
+            console.log(idCamera);   
+            console.log(selectedLense);               
+            console.log(selectQty);                     
             basketContent = [];
+            let product = new MyProduct(idCamera, selectedLense, selectQty);
+            basketContent.push(product);
+            localStorage.setItem("basketContent", JSON.stringify(basketContent));
+            console.log(basketContent); 
+                 
+        }      
+         else{      
+             for(let i=0;i<basketContent.length;i++){
+                console.log(selectQty);                     
+
+                 if (basketContent[i].idCamera == idCamera && basketContent[i].selectedLense == selectedLense){ 
+                    console.log("camera presente rajouter quantité")
+                    let qtyInt = parseInt(basketContent[i].playerQty);
+                    console.log("quantité presente dans le panier",qtyInt); 
+                    let parseSelectQty = parseInt(selectQty);
+                    qtyInt += parseSelectQty;
+                    basketContent[i].playerQty = qtyInt;
+                    console.log("nouvelle-quantité",qtyInt) ;         
+       
+                     localStorage.setItem("basketContent ", JSON.stringify(basketContent));  
+                    console.log("contenu localeStorage",basketContent);                 
+                 }
+                 else if (basketContent[i].idCamera == idCamera && basketContent[i].selectedLense != selectedLense){
+                     console.log("camera ok mais pas lens")
+                    let product = new MyProduct(idCamera, selectedLense, selectQty);
+                    basketContent.push(product);
+                    localStorage.setItem("basketContent", JSON.stringify(basketContent));
+                    console.log(basketContent); 
+                 }            
+         }
+         
         }
-        let product = new MyProduct(idCamera, selectedLense, selectQty);
-        basketContent.push(product);
-        localStorage.setItem("basketContent", JSON.stringify(basketContent));
-        console.log(localStorage);
+                        
+        
     })
+   
+    
 }
+
+
+ 
+
+
+
 //----------------------------------Requête API----------------------------------
 
 const getCameraByID = async function(){  
