@@ -70,8 +70,8 @@ function cardCamera(findCamera){
     textPriceCamera.id = "textPriceCamera";
     calculatedPrice(findCamera);
 
-    let linkProduct = document.createElement("a");
-    textPriceCamera.appendChild(linkProduct);
+    /* let linkProduct = document.createElement("a");
+    textPriceCamera.appendChild(linkProduct); */
     // Création du bouton 
     let buttonBuy = document.createElement("button");
     divCardBody.appendChild(buttonBuy);
@@ -172,8 +172,7 @@ function addCamera(buttonBuy) {
             let product = new MyProduct(idCamera, selectedLense, selectQty);
             basketContent.push(product);
             localStorage.setItem("basketContent", JSON.stringify(basketContent));
-            console.log(basketContent); 
-                 
+            console.log(basketContent);                  
         }      
          else{      
              for(let i=0;i<basketContent.length;i++){
@@ -186,9 +185,8 @@ function addCamera(buttonBuy) {
                     let parseSelectQty = parseInt(selectQty);
                     qtyInt += parseSelectQty;
                     basketContent[i].playerQty = qtyInt;
-                    console.log("nouvelle-quantité",qtyInt) ;    
-       
-                    localStorage.setItem("basketContent ", JSON.stringify(basketContent));  
+                    console.log("nouvelle-quantité",qtyInt);        
+                    localStorage.setItem("playerQty", JSON.stringify(basketContent[i].playerQty));  
                     console.log("contenu localeStorage",basketContent);                 
                  }
                  else if (basketContent[i].idCamera == idCamera && basketContent[i].selectedLense != selectedLense){
@@ -196,12 +194,13 @@ function addCamera(buttonBuy) {
                     let product = new MyProduct(idCamera, selectedLense, selectQty);
                     basketContent.push(product);
                     localStorage.setItem("basketContent", JSON.stringify(basketContent));
-                    console.log(basketContent); 
-                 }            
+                    console.log(basketContent);                 
+                 }  
+                       
          }
          
         }                       
-        
+       
     })  
     
 }
