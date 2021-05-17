@@ -40,15 +40,15 @@
         
         <!-- PANIER-->
 
-        <table class="table">
+        <table class="table" id='tableProduct'>
             <thead>
-              <tr class="text-center")>
+              <tr class="text-center">
                 <th scope="col"></th>
                 <th scope="col">Produit</th>
-                <th scope="col">Objectif</th>
+                <!-- <th scope="col">Objectif</th> -->
                 <th scope="col">Quantité</th>
                 <th scope="col">prix</th>
-                <th scope="col">supprimer</th>
+                <!-- <th scope="col">supprimer</th> -->
               </tr>
             </thead>
             <tbody id="addProduct">
@@ -60,62 +60,73 @@
 
         <div class="d-flex justify-content-center fw-bold" id="totalPrice">
            <!--à compléter avec JS-->
-         </div>
+          
+        </div>
+        <div class="text-center" id="btn-delete">
+            <button class="btn btn-primary  my-3" id="btn-empty"> Vider le panier</button>
+            <p id = "textEmpty"></p>
+             <!--à compléter avec JS-->
+            
+        </div>
 
         <!--FORMULAIRE-->
-        <form id="Form">
+        <form  method="POST"  onsubmit="validation()">
             <div class="needs-validation">
                 <div class="form-row">
                         <!--Prénom-->
                     <div class="col-md-6 mb-1">
                         <label for="firstName" class="pt-3">Prénom</label>
-                        <input type="text" class="form-control " id="firstName" placeholder="indiquez votre prénom" required>
-
+                        <input type="text" pattern = "(.|\n|\r|\n\r){3,}" class="form-control " id="firstName" placeholder="Indiquez votre prénom" required>
                     </div>
                     <!--Nom-->
                     <div class="col-md-6 mb-1">
-                        <label for="lastName" class="pt-3">Nom</label>
-                        <input type="text" class="form-control " id="lastName" placeholder="indiquez votre nom" required>
-
+                        <label for="lastName"  class="pt-3">Nom</label>
+                        <input type="text" pattern = "(.|\n|\r|\n\r){3,}" class="form-control " id="lastName" placeholder="Indiquez votre nom" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <!--Adresse-->
                     <div class="col-md-9 mb-1">
-                        <label for="address" class="pt-3">Adresse</label>
-                        <input type="text" class="form-control " id="address" placeholder="indiquez votre adresse"
-                            required>
-
+                        <label for="address"  class="pt-3">Adresse</label>
+                        <input type="text" pattern = "(.|\n|\r|\n\r){3,}" class="form-control " id="address" placeholder="Indiquez votre adresse" required>
                     </div>
                     <!--Ville-->
                     <div class="col-md-3 mb-1">
-                        <label for="city" class="pt-3">Ville</label>
-                        <input type="text" class="form-control " id="city" placeholder="indiquez votre ville" required>
-
+                        <label for="city"  class="pt-3">Ville</label>
+                        <input type="text" pattern ="[A-Z-a-z-\s]{3,40}" class="form-control " id="city" placeholder="Indiquez votre ville" required>
                     </div>
-                    <!--Ville-->
+                    <!--code postal-->
                     <div class="col-md-3 mb-1">
-                        <label for="zip" class="pt-3">Code postal</label>
-                        <input type="text" class="form-control " id="zip" placeholder="indiquez votre code postale" required>
-
+                        <label for="zip"  class="pt-3">Code postal</label>
+                        <input type="text" pattern="[0-9]{5}" class="form-control " id="zip" placeholder="#####" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <!--Email-->
-                    <div class="col mb-1">
-                        <label for="email" class="pt-3">Email</label>
-                        <input type="email" class="form-control " id="email" placeholder="xxxxxxxx@mail.com"
-                            required>
-                        <span class="error" aria-live="polite"></span>
+                    <div class="col-md-6 mb-1">
+                        <label for="email"  class="pt-3" required>Email</label>
+                        <input type="email" class="form-control " id="mail" placeholder="xxxxxxxx@mail.com" required>
                     </div>
                 </div>
+            <div class="form-row">
+                    <div class="col-md-6 mt-3">
+                        <input type="submit" class="btn btn-primary  my-3" value="Commander" />
+                    </div>
+                </div>
+                <!-- <div class="text-right">
+                    <button class="btn btn-primary  my-3" id="btn-validation"> Valider la commande</button>
+                </div> -->
             </div>
         </form>
     
-         <!--BOUTON VALIDATION COMMANDE-->
-        <div class="text-right">
+      <!-- BOUTON VALIDATION COMMANDE-->
+        <!-- <div class="text-right">
             <button class="btn btn-primary  my-3" id="btn-validation"> Valider la commande</button>
-        </div>
+            
+        </div> -->
+ 
+
+
   
          <!-- FOOTER-->
 

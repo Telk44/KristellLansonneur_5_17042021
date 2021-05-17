@@ -3,14 +3,15 @@
 
 //Création du HTML du panier à partir des données des articles choisis
 
-function createBasket(itemCamera,basketContent) {
+function createBasket(itemCamera,existingEntries) {
+    
   
     let addProductBasket = document.getElementById('addProduct');    
 
     let trBasket = document.createElement('tr');
     addProductBasket.appendChild(trBasket);
-    /* trBasket.classList.add("row"); */
-   
+    trBasket.id ="trBasket";
+       
    let tdCamera = document.createElement('td'); 
     trBasket.appendChild(tdCamera);
     let pictureCamera =document.createElement('img');
@@ -24,52 +25,61 @@ function createBasket(itemCamera,basketContent) {
     nameCamera.classList.add('text-center')
     nameCamera.textContent = itemCamera.name;
 
-    let lenseCamera = document.createElement('td');
+   /*  let lenseCamera = document.createElement('td');
     trBasket.appendChild(lenseCamera);
     lenseCamera.classList.add('text-center')
-    lenseCamera.textContent = basketContent[i].selectedLense; 
+    lenseCamera.textContent = existingEntries[i].selectedLense;  */
 
     let qtyCamera = document.createElement('td');
     trBasket.appendChild(qtyCamera);
     qtyCamera.classList.add('text-center')
-    qtyCamera.textContent = basketContent[i].playerQty;
+    qtyCamera.textContent = existingEntries[i].selectQty;
 
     let priceCamera = document.createElement('td');
     trBasket.appendChild(priceCamera);
     priceCamera.classList.add('text-center')
-    priceCamera.textContent = itemCamera.price*basketContent[i].playerQty/100 +" €";
+    priceCamera.textContent = itemCamera.price*existingEntries[i].selectQty/100 +" €";
     priceCamera.id="priceByQty";
 
-    let tdBasket = document.createElement('td');
+   /*  let tdBasket = document.createElement('td');
     trBasket.appendChild(tdBasket);
     tdBasket.classList.add('text-center');
+    let buttonBasket = document.createElement("button");
+    tdBasket.appendChild(buttonBasket);
+    buttonBasket.id ="buttonBasket";
+
     let pictoBasket = document.createElement("img");
-    tdBasket.appendChild(pictoBasket);
-    pictoBasket.src= "images/trash.svg";
-  
+    buttonBasket.appendChild(pictoBasket);
+    pictoBasket.src= "images/trash.svg"; */
+
+    
 }
 
-//Tableau de stockage des prix par quantité
+//Tableau de stockage du prix * quantité pour chaque caméra
 
 let arrayPrice = [];
 
 //Calcul du prix*quantité et ajout au tableau de stockage 
 
-function addItemPrice(itemCamera,basketContent) {
-    let itemPrice = itemCamera.price*basketContent[i].playerQty/100 ;    
+function addItemPrice(itemCamera,existingEntries) {
+    let itemPrice = itemCamera.price/100 * existingEntries[i].selectQty;  
+    console.log("itemprice",itemPrice)  
     arrayPrice.push(itemPrice);
-    console.log("test ajout prix au tableau",itemPrice)
+    console.log("test prix par quantité pour chaque ligne",itemPrice)
 }
 
 //Montant total de la commande 
 function totalPriceOrder(arrayPrice) {
-    let totalPrice = document.getElementById('totalPrice');
+    let totalPrice = document.getElementById('totalPrice');    
     let total = 0;
     for (i = 0; i < arrayPrice.length; i++) {
         total += arrayPrice[i];
-        totalPrice.textContent = "Montant total de votre panier : " + total + " €";
-       
+        totalPrice.textContent = "Montant total de votre panier : " + total + " €";      
+        console.log("prix total",total)
+         //Stockage du prix dans le localStorage pour la page de confirmation
+        localStorage.setItem("totalOrder", JSON.stringify(total));       
     }
+    emptyBasket()
 }
 
 //Requête API et localStorage pour création du panier et du montant total du panier
@@ -80,20 +90,18 @@ const getBasket = async function(){
         if (response.ok) {
             let cameras = await response.json();
             // Récupération contenu du panier en localstorage
-            let basketContent = JSON.parse(localStorage.getItem("basketContent"));
-            console.log('contenu du localstorage',basketContent);
+            let existingEntries = JSON.parse(localStorage.getItem("allEntries"))
+            console.log('contenu du localstorage',existingEntries);
                         
-            for (i = 0; i < basketContent.length; i++) {
-                let itemCamera = cameras.find(cameras => cameras['_id'] == basketContent[i].idCamera);
+            for (i = 0; i < existingEntries.length; i++) {
+                let itemCamera = cameras.find(cameras => cameras['_id'] == existingEntries[i].idCamera);
                 console.log("résultat recherche cam choisie par l'ID",itemCamera);
-                createBasket(itemCamera, basketContent);
-                addItemPrice(itemCamera,basketContent);            
-                
+                createBasket(itemCamera, existingEntries);
+                addItemPrice(itemCamera,existingEntries);           
             }
             totalPriceOrder(arrayPrice);
-             
+            emptyBasket(existingEntries)
             
-          
         } else {
             console.error('Retour du serveur : ', response.status);
         }
@@ -102,5 +110,71 @@ const getBasket = async function(){
         console.log(e);
     }
 }
+//-------------Suppression du panier-------------------------//
+
+
+function emptyBasket(existingEntries,total){
+   
+    let buttonDelete = document.getElementById("btn-empty");
+    let totalPrice = document.getElementById('totalPrice');
+    let tableProduct = document.getElementById('tableProduct'); 
+
+buttonDelete.addEventListener('click', function(){
+  /*  localStorage.removeItem(existingEntries); 
+   localStorage.removeItem(total);   */
+   localStorage.clear();
+   console.log("votre panier est vide")  
+   buttonDelete.remove();
+   tableProduct.remove();
+   totalPrice.textContent ="Votre panier est vide"
+   
+})
+}
+
+
+//-------------Validation du formulaire -------------------------//
+
+
+//Création de l'objet contact contenant les données du formulaire qui va être envoyé au serveur
+
+/* let contact = {}; */
+
+//Création d'une classe pour structurer l'objet contact
+class ContactData {
+    constructor(name, surname, adress, city, zip,email) {
+        this.firstName = name;
+        this.lastName = surname;
+        this.address = adress;
+        this.city = city;
+        this.zip = zip;
+        this.email = email;
+    }
+}
+
+let form  = document.getElementsByTagName('form')[0];
+let firstName = document.getElementById('firstName');
+let lastName = document.getElementById('lastName');
+let address = document.getElementById('address');
+let city = document.getElementById('city');
+let zip = document.getElementById('zip');
+let email = document.getElementById('mail');
+
+
+ email.addEventListener('input', () => {
+  email.setCustomValidity('');
+  email.checkValidity();
+});
+
+email.addEventListener('invalid', () => {
+  if(email.value === '') {
+    email.setCustomValidity('Entrez votre mail');
+  } else {
+    email.setCustomValidity('votre email comporte des erreurs, vérifiez le');
+  }
+});
+
+
+
+//Appels des fonctions
     
 getBasket()
