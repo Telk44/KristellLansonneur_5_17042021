@@ -97,11 +97,10 @@ const getBasket = async function(){
                 let itemCamera = cameras.find(cameras => cameras['_id'] == existingEntries[i].idCamera);
                 console.log("résultat recherche cam choisie par l'ID",itemCamera);
                 createBasket(itemCamera, existingEntries);
-                addItemPrice(itemCamera,existingEntries);           
+                addItemPrice(itemCamera,existingEntries); 
             }
-            totalPriceOrder(arrayPrice);
-            emptyBasket(existingEntries)
-            
+                totalPriceOrder(arrayPrice);
+                 emptyBasket()
         } else {
             console.error('Retour du serveur : ', response.status);
         }
@@ -113,14 +112,14 @@ const getBasket = async function(){
 //-------------Suppression du panier-------------------------//
 
 
-function emptyBasket(existingEntries,total){
+function emptyBasket(/* existingEntries,tota */){
    
     let buttonDelete = document.getElementById("btn-empty");
     let totalPrice = document.getElementById('totalPrice');
     let tableProduct = document.getElementById('tableProduct'); 
 
 buttonDelete.addEventListener('click', function(){
-  /*  localStorage.removeItem(existingEntries); 
+  /*  localStorage.removeItem("allEntries"); 
    localStorage.removeItem(total);   */
    localStorage.clear();
    console.log("votre panier est vide")  
@@ -131,34 +130,11 @@ buttonDelete.addEventListener('click', function(){
 })
 }
 
-
 //-------------Validation du formulaire -------------------------//
 
-
-//Création de l'objet contact contenant les données du formulaire qui va être envoyé au serveur
-
-/* let contact = {}; */
-
-//Création d'une classe pour structurer l'objet contact
-class ContactData {
-    constructor(name, surname, adress, city, zip,email) {
-        this.firstName = name;
-        this.lastName = surname;
-        this.address = adress;
-        this.city = city;
-        this.zip = zip;
-        this.email = email;
-    }
-}
-
-let form  = document.getElementsByTagName('form')[0];
-let firstName = document.getElementById('firstName');
-let lastName = document.getElementById('lastName');
-let address = document.getElementById('address');
-let city = document.getElementById('city');
-let zip = document.getElementById('zip');
-let email = document.getElementById('mail');
-
+// validation personnalisée des erreurs de mail
+ 
+ let email = document.getElementById('mail'); 
 
  email.addEventListener('input', () => {
   email.setCustomValidity('');
@@ -174,7 +150,68 @@ email.addEventListener('invalid', () => {
 });
 
 
+let firstName = document.getElementById('firstName')
+let lastName = document.getElementById('lastName')
+let address = document.getElementById('address')
+let city = document.getElementById('city')
+
+
+function send(e) {
+    
+    fetch("http://localhost:3000/api/cameras/order", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json', 
+        'Content-Type': 'application/json'
+      },
+      body:submitForm(postData)
+    })
+    .then(function(res) {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+    .then(function(res) {
+      
+     localStorage.setItem( "numeroCommande",responseId.orderId)  
+     window.location.href = "confirm.html";
+    })
+    .catch((err) => console.log('Erreur :' + err));  
+  }
+
+
+function submitForm(postData){
+  const form = document.querySelector("#form");
+  let existingEntries = JSON.parse(localStorage.getItem("allEntries"));
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault(); 
+    //Récupération des données du formulaire dans l'objet contact
+    const contact = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      address: address.value,
+      city: city.value,
+      email: email.value,
+    } 
+    //Ajout des id des articles choisis dans le tableau products
+    const products = [];
+    existingEntries.forEach(product =>{
+        products.push(product.idCamera) 
+        console.log("products",products)
+    }) 
+    console.log({"contact":contact,"products": products});
+    let postData = JSON.stringify({"contact":contact,"products": products});
+  })
+}
+
 
 //Appels des fonctions
     
 getBasket()
+submitForm()
+send()
+
+/* function addIdProducts(basketContent) {
+  products.push(basketContent[i].idCamera);
+} */

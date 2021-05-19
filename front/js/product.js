@@ -105,7 +105,7 @@ function chooseLense(divCardBody, findCamera) {
 
   //----------------------------------Fonction ajout choix de la quantité----------------------------------
 
-function selectQuantity(divCardBody,findCamera) {
+function selectQuantity(divCardBody) {
     
     let textChooseQuantity = document.createElement("p");
     divCardBody.appendChild(textChooseQuantity );
@@ -184,50 +184,6 @@ function addCamera(buttonBuy) {
         }       
     });
     }
-/* 
- function addCamera(buttonBuy) {
-    
-    // ajout des données au clik sur le bouton acheter
-    buttonBuy.addEventListener('click', function () {
-          
-        let existingEntries = JSON.parse(localStorage.getItem("allEntries"));
-        let selectQty = document.getElementById('selectQty').value;
-        let idCamera = getId(); 
-        let entry = {idCamera,selectQty};
-        
-      // vérifie si le localstorage est vide et si oui créé un array
-        if(!existingEntries) {
-        existingEntries = [];     
-        /* localStorage.setItem("entry", JSON.stringify(entry)); */
-       /*  existingEntries.push(entry);         
-        localStorage.setItem("allEntries", JSON.stringify(existingEntries));
-        console.log("création du storage",localStorage) */
-
-     // si le LocalStorage n'est pas vide
-  /*   }else{ 
-       
-        for(let i=0;i<existingEntries.length;i++){
-            // si la caméra et l'objectif sont présents, rajouter la quantité sélectionnée
-                if (existingEntries[i].idCamera == idCamera){ 
-                    
-                console.log("camera presente rajouter quantité")
-                let qtyInt = parseInt(existingEntries[i].selectQty);
-                console.log("quantité presente dans le panier",qtyInt);
-                let parseSelectQty = parseInt(selectQty);
-                qtyInt += parseSelectQty;
-                existingEntries[i].selectQty= qtyInt;                 
-                localStorage.setItem("allEntries", JSON.stringify(existingEntries)); 
-                console.log("contenu localeStorage",existingEntries); 
-                }else{
-                console.log("tableau existe mais pas la camera et sa quantité")  ;
-                existingEntries.push(entry);         
-                localStorage.setItem("allEntries", JSON.stringify(existingEntries));
-                console.log("création du storage",localStorage)}
-        }
-    }        
-});
-}  */         
-      
 
 //----------------------------------Requête API----------------------------------
 
