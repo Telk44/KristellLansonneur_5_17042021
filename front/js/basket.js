@@ -1,18 +1,11 @@
-
-//-------------------------------Affichage du panier---------------------------------------//
-
-//Création du HTML du panier à partir des données des articles choisis
-
-function createBasket(itemCamera,existingEntries) {
-    
-  
-    let addProductBasket = document.getElementById('addProduct');    
-
+//Fonction Création du HTML du panier à partir des données des articles choisis
+function createBasket(itemCamera,basketContent) {
+    let addProductBasket = document.getElementById('addProduct');   
     let trBasket = document.createElement('tr');
-    addProductBasket.appendChild(trBasket);
+    addProductBasket .appendChild(trBasket);
     trBasket.id ="trBasket";
        
-   let tdCamera = document.createElement('td'); 
+    let tdCamera = document.createElement('td'); 
     trBasket.appendChild(tdCamera);
     let pictureCamera =document.createElement('img');
     tdCamera.appendChild(pictureCamera);
@@ -25,50 +18,42 @@ function createBasket(itemCamera,existingEntries) {
     nameCamera.classList.add('text-center')
     nameCamera.textContent = itemCamera.name;
 
-   /*  let lenseCamera = document.createElement('td');
-    trBasket.appendChild(lenseCamera);
-    lenseCamera.classList.add('text-center')
-    lenseCamera.textContent = existingEntries[i].selectedLense;  */
-
     let qtyCamera = document.createElement('td');
     trBasket.appendChild(qtyCamera);
     qtyCamera.classList.add('text-center')
-    qtyCamera.textContent = existingEntries[i].selectQty;
+    qtyCamera.textContent = basketContent[i].selectQty;
 
     let priceCamera = document.createElement('td');
     trBasket.appendChild(priceCamera);
     priceCamera.classList.add('text-center')
-    priceCamera.textContent = itemCamera.price*existingEntries[i].selectQty/100 +" €";
+    priceCamera.textContent = itemCamera.price*basketContent[i].selectQty/100 +" €";
     priceCamera.id="priceByQty";
-
-   /*  let tdBasket = document.createElement('td');
-    trBasket.appendChild(tdBasket);
-    tdBasket.classList.add('text-center');
-    let buttonBasket = document.createElement("button");
-    tdBasket.appendChild(buttonBasket);
-    buttonBasket.id ="buttonBasket";
-
-    let pictoBasket = document.createElement("img");
-    buttonBasket.appendChild(pictoBasket);
-    pictoBasket.src= "images/trash.svg"; */
-
-    
+}    
+//Fonction affichage de la page quand le panier est vide
+function noBasket(){
+    let buttonDelete = document.getElementById("btn-empty");
+    let totalPrice = document.getElementById('totalPrice');
+    let tableProduct = document.getElementById('tableProduct'); 
+    let form = document.getElementById ('form')
+    buttonDelete.classList.add("d-none");
+    tableProduct.classList.add("d-none");
+    form.classList.add("d-none");
+    totalPrice.textContent ="Votre panier est vide";
+    totalPrice.classList.add("col-md-6","border","background-color","rounded" ,"mx-auto","my-5", "py-5", "text-center")
 }
 
 //Tableau de stockage du prix * quantité pour chaque caméra
-
 let arrayPrice = [];
 
-//Calcul du prix*quantité et ajout au tableau de stockage 
-
-function addItemPrice(itemCamera,existingEntries) {
-    let itemPrice = itemCamera.price/100 * existingEntries[i].selectQty;  
+//Fonction Calcul du prix*quantité et ajout au tableau de stockage
+function addItemPrice(itemCamera,basketContent) {
+    let itemPrice = itemCamera.price/100 * basketContent[i].selectQty;  
     console.log("itemprice",itemPrice)  
     arrayPrice.push(itemPrice);
     console.log("test prix par quantité pour chaque ligne",itemPrice)
 }
 
-//Montant total de la commande 
+//Fonction Montant total de la commande
 function totalPriceOrder(arrayPrice) {
     let totalPrice = document.getElementById('totalPrice');    
     let total = 0;
@@ -79,111 +64,78 @@ function totalPriceOrder(arrayPrice) {
          //Stockage du prix dans le localStorage pour la page de confirmation
         localStorage.setItem("totalOrder", JSON.stringify(total));       
     }
-    emptyBasket()
 }
-
-//Requête API et localStorage pour création du panier et du montant total du panier
-
+//Requête API et récupération des données du localStorage pour création du panier et du montant total du panier
 const getBasket = async function(){  
     try {
         let response = await fetch("http://localhost:3000/api/cameras");
         if (response.ok) {
             let cameras = await response.json();
             // Récupération contenu du panier en localstorage
-            let existingEntries = JSON.parse(localStorage.getItem("allEntries"))
-            console.log('contenu du localstorage',existingEntries);
-                        
-            for (i = 0; i < existingEntries.length; i++) {
-                let itemCamera = cameras.find(cameras => cameras['_id'] == existingEntries[i].idCamera);
-                console.log("résultat recherche cam choisie par l'ID",itemCamera);
-                createBasket(itemCamera, existingEntries);
-                addItemPrice(itemCamera,existingEntries); 
+            let basketContent = JSON.parse(localStorage.getItem("allEntries"))
+            console.log('contenu du localstorage',basketContent);
+            if(localStorage.length>0){
+                for (i = 0; i < basketContent.length; i++) {
+                    let itemCamera = cameras.find(cameras => cameras['_id'] == basketContent[i].idCamera);
+                    console.log("résultat recherche cam choisie par l'ID",itemCamera);
+                    createBasket(itemCamera, basketContent);
+                    addItemPrice(itemCamera,basketContent); 
+                }
+                    totalPriceOrder(arrayPrice);
+            }else{
+                noBasket();
             }
-                totalPriceOrder(arrayPrice);
-                 emptyBasket()
         } else {
             console.error('Retour du serveur : ', response.status);
         }
     }
-    catch (e) {
+    catch (e) { 
         console.log(e);
     }
 }
-//-------------Suppression du panier-------------------------//
-
-
-function emptyBasket(/* existingEntries,tota */){
-   
+//Suppression des éléments du panier et du localStorage
+function emptyBasket(){
     let buttonDelete = document.getElementById("btn-empty");
-    let totalPrice = document.getElementById('totalPrice');
-    let tableProduct = document.getElementById('tableProduct'); 
-
-buttonDelete.addEventListener('click', function(){
-  /*  localStorage.removeItem("allEntries"); 
-   localStorage.removeItem(total);   */
-   localStorage.clear();
-   console.log("votre panier est vide")  
-   buttonDelete.remove();
-   tableProduct.remove();
-   totalPrice.textContent ="Votre panier est vide"
-   
+    buttonDelete.addEventListener('click', function(){
+      localStorage.removeItem("allEntries"); 
+      localStorage.removeItem("totalOrder");  
+      console.log("votre panier est vide");  
+      noBasket()
 })
 }
-
-//-------------Validation du formulaire -------------------------//
-
-// validation personnalisée des erreurs de mail
- 
- let email = document.getElementById('mail'); 
-
- email.addEventListener('input', () => {
-  email.setCustomValidity('');
-  email.checkValidity();
-});
-
-email.addEventListener('invalid', () => {
-  if(email.value === '') {
-    email.setCustomValidity('Entrez votre mail');
-  } else {
-    email.setCustomValidity('votre email comporte des erreurs, vérifiez le');
-  }
-});
-
-
+//Requête POST pour envoyer l'objet Contact et le tableau products à l'API et récupération du numéro de commande et stockage dans le localStorage
+let email = document.getElementById('mail'); 
 let firstName = document.getElementById('firstName')
 let lastName = document.getElementById('lastName')
 let address = document.getElementById('address')
 let city = document.getElementById('city')
 
-
-function send(e) {
-    
-    fetch("http://localhost:3000/api/cameras/order", {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json', 
-        'Content-Type': 'application/json'
-      },
-      body:submitForm(postData)
-    })
-    .then(function(res) {
-      if (res.ok) {
-        return res.json();
-      }
-    })
-    .then(function(res) {
-      
-     localStorage.setItem( "numeroCommande",responseId.orderId)  
-     window.location.href = "confirm.html";
-    })
-    .catch((err) => console.log('Erreur :' + err));  
-  }
-
-
-function submitForm(postData){
+  async function postForm(dataToSend ) {
+    try {
+        let response = await fetch("http://localhost:3000/api/cameras/order", {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: dataToSend ,
+        });
+        if (response.ok) {
+            let responseId = await response.json();
+            let orderId = responseId.orderId;
+             console.log(orderId);
+            localStorage.setItem("orderConfirmationId", orderId);
+            window.location.href = "confirm.html";
+        } else {
+            console.error('Retour du serveur : ', response.status);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+//Validation de la commande et envoi de l'objet contact et du tableau product à l'API
+function submitForm(){
   const form = document.querySelector("#form");
-  let existingEntries = JSON.parse(localStorage.getItem("allEntries"));
-
+  let basketContent = JSON.parse(localStorage.getItem("allEntries"));
   form.addEventListener("submit", function(e){
     e.preventDefault(); 
     //Récupération des données du formulaire dans l'objet contact
@@ -196,22 +148,18 @@ function submitForm(postData){
     } 
     //Ajout des id des articles choisis dans le tableau products
     const products = [];
-    existingEntries.forEach(product =>{
+    basketContent.forEach(product =>{
         products.push(product.idCamera) 
         console.log("products",products)
     }) 
     console.log({"contact":contact,"products": products});
-    let postData = JSON.stringify({"contact":contact,"products": products});
+    let dataToSend = JSON.stringify({contact,products});
+    postForm(dataToSend )
   })
 }
-
-
-//Appels des fonctions
-    
+//Appels des fonctions 
 getBasket()
 submitForm()
-send()
+emptyBasket()
 
-/* function addIdProducts(basketContent) {
-  products.push(basketContent[i].idCamera);
-} */
+
